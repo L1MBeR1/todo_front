@@ -1,7 +1,7 @@
-export const MainPage = () => {
+export const NotFoundPage = () => {
 	return (
 		<div className='text-red-500'>
-			<p>dgdf</p>
+			<p>404</p>
 		</div>
 	)
 }
