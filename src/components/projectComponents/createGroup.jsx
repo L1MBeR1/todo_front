@@ -72,10 +72,10 @@ export const CreateGroup = ({ projectId }) => {
 			) : (
 				<div className='w-full'>
 					<Button
-						className='justify-start border-0'
+						className='justify-start'
 						startContent={<Plus size={18} />}
 						fullWidth
-						variant={'faded'}
+						variant={'light'}
 						onPress={handleCreateGroup}
 					>
 						Добавить группу

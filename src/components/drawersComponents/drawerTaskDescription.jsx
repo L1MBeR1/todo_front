@@ -1,18 +1,18 @@
-import { Input } from '@heroui/react'
+import { Textarea } from '@heroui/react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useEffect, useRef, useState } from 'react'
 
 import { projectService } from '../../services/projects'
 
-export const GroupName = ({ name, projectId, id }) => {
-	const [isChangingName, setIsChangingName] = useState(false)
-	const [newName, setNewName] = useState('')
+export const TaskDescription = ({ description, projectId, id }) => {
+	const [isChangingDescription, setIsChangingDescription] = useState(false)
+	const [newDescription, setNewDescription] = useState('')
 	const inputRef = useRef(null)
 
 	const handleBlur = () => {
-		if (newName.length === 0 || newName === name) {
-			setIsChangingName(false)
-			setNewName('')
+		if (newDescription.length === 0 || newDescription === name) {
+			setNewDescription(false)
+			newDescription('')
 			return
 		}
 		mutate()
@@ -20,20 +20,20 @@ export const GroupName = ({ name, projectId, id }) => {
 	}
 
 	useEffect(() => {
-		if (isChangingName && inputRef.current) {
+		if (isChangingDescription && inputRef.current) {
 			inputRef.current.focus()
 		}
-	}, [isChangingName])
+	}, [isChangingDescription])
 
 	const handleChange = value => {
-		setNewName(value)
+		setNewDescription(value)
 	}
 
 	const queryClient = useQueryClient()
 	const { mutate } = useMutation({
-		mutationKey: ['update-group-name'],
+		mutationKey: ['update-task-description'],
 		mutationFn: () =>
-			projectService.updateGroup(id, projectId, { name: newName }),
+			projectService.updateGroup(id, projectId, { name: newDescription }),
 		onSuccess(response) {
 			console.log(response)
 			queryClient.refetchQueries({
@@ -42,18 +42,18 @@ export const GroupName = ({ name, projectId, id }) => {
 			})
 		},
 		onSettled() {
-			setIsChangingName(false)
-			setNewName('')
+			setIsChangingDescription(false)
+			setNewDescription('')
 		}
 	})
 
 	return (
 		<>
-			{isChangingName && projectId ? (
-				<Input
+			{isChangingDescription ? (
+				<Textarea
 					radius='sm'
 					variant='bordered'
-					value={newName}
+					value={newDescription}
 					ref={inputRef}
 					onBlur={() => {
 						handleBlur()
@@ -64,13 +64,13 @@ export const GroupName = ({ name, projectId, id }) => {
 				/>
 			) : (
 				<p
-					className='font-semibold cursor-pointer select-none'
+					className='font-medium cursor-pointer select-none text-xl'
 					onClick={() => {
-						setIsChangingName(true)
-						setNewName(name)
+						setIsChangingDescription(true)
+						setNewDescription(newDescription)
 					}}
 				>
-					{name}
+					{newDescription}
 				</p>
 			)}
 		</>

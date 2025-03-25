@@ -11,32 +11,49 @@ import {
 	Textarea
 } from '@heroui/react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useNavigate } from 'react-router-dom'
 
-import { APP_PAGES } from '../../../config/pageConfig'
 import { projectService } from '../../../services/projects'
 
-const CreateProjectModal = ({ isOpen, onOpenChange }) => {
-	const { handleSubmit, register, reset } = useForm()
+export const UpdateProjectModal = ({
+	isOpen,
+	onOpenChange,
+	id,
+	name,
+	description
+}) => {
+	const {
+		handleSubmit,
+		register,
+		reset,
+		formState: { errors }
+	} = useForm({
+		defaultValues: { name, description }
+	})
+
 	const queryClient = useQueryClient()
 	const [loading, setLoading] = useState(false)
 
-	const navigate = useNavigate()
+	useEffect(() => {
+		if (isOpen) {
+			reset({ name, description })
+		}
+	}, [isOpen, name, description, reset])
 
-	const createProject = useMutation({
-		mutationKey: ['create-project'],
-		mutationFn: data => projectService.createProject(data),
+	const updateProject = useMutation({
+		mutationKey: ['update-project'],
+		mutationFn: data => projectService.updateProject(id, data),
 		onMutate() {
 			setLoading(true)
 		},
-		onSuccess(data) {
-			console.log(data)
-			reset()
+		onSuccess() {
 			onOpenChange(false)
 			queryClient.refetchQueries({ queryKey: ['my-projects'], type: 'active' })
-			navigate(`${APP_PAGES.WORKSPACE.PROJECT}/${data.id}`)
+			queryClient.refetchQueries({
+				queryKey: [`project/${id}`],
+				type: 'active'
+			})
 		},
 		onSettled() {
 			setLoading(false)
@@ -45,7 +62,7 @@ const CreateProjectModal = ({ isOpen, onOpenChange }) => {
 
 	const onSubmit = data => {
 		console.log(data)
-		createProject.mutate(data)
+		updateProject.mutate(data)
 	}
 
 	return (
@@ -53,14 +70,14 @@ const CreateProjectModal = ({ isOpen, onOpenChange }) => {
 			isDismissable={false}
 			isOpen={isOpen}
 			onOpenChange={onOpenChange}
-			className='p-2 '
+			className='p-2'
 			hideCloseButton={true}
 		>
 			<ModalContent>
 				{onClose => (
 					<>
 						<ModalHeader className='font-primary text-xl font-semibold'>
-							Создание проекта
+							Изменение проекта
 						</ModalHeader>
 						<form
 							className='flex flex-col gap-4 w-full'
@@ -75,7 +92,12 @@ const CreateProjectModal = ({ isOpen, onOpenChange }) => {
 										variant='bordered'
 										required
 										maxLength={150}
-										{...register('name', { required: 'Название обязательно' })}
+										isInvalid={!!errors.name}
+										errorMessage={errors.name?.message}
+										{...register('name', {
+											required: 'Название обязательно',
+											value: name
+										})}
 									/>
 									<Textarea
 										radius='sm'
@@ -85,7 +107,9 @@ const CreateProjectModal = ({ isOpen, onOpenChange }) => {
 										maxLength={200}
 										maxRows={5}
 										placeholder='Введите описание проекта'
-										{...register('description')}
+										{...register('description', {
+											value: description
+										})}
 									/>
 								</div>
 							</ModalBody>
@@ -109,7 +133,7 @@ const CreateProjectModal = ({ isOpen, onOpenChange }) => {
 									size='md'
 									isLoading={loading}
 								>
-									Создать
+									Сохранить
 								</Button>
 							</ModalFooter>
 						</form>
@@ -119,5 +143,3 @@ const CreateProjectModal = ({ isOpen, onOpenChange }) => {
 		</Modal>
 	)
 }
-
-export default CreateProjectModal

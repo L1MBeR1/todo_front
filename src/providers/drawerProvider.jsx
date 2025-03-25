@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { DrawerContext } from '../contexts/drawerProvider'
+import { DrawerContext } from '../contexts/drawerContext'
 
 export const DrawerProvider = ({ children }) => {
 	const [isDrawerOpen, setIsDrawerOpen] = useState(false)

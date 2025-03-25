@@ -3,6 +3,7 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import { RegisterForm } from './components/forms/auth/registerForm'
 import { APP_PAGES } from './config/pageConfig'
 import { AuthLayout } from './layouts/authLayout'
+import { MainLayout } from './layouts/mainLayout'
 import { WorkSpaceLayout } from './layouts/workSpaceLayout'
 import { LoginPage } from './pages/loginPage'
 import { MainPage } from './pages/mainPage'
@@ -15,9 +16,14 @@ function App() {
 		<Routes>
 			//TODO: Написать пути из config
 			<Route
-				index
-				element={<MainPage />}
-			/>
+				path='/'
+				element={<MainLayout />}
+			>
+				<Route
+					index
+					element={<MainPage />}
+				/>
+			</Route>
 			<Route
 				path='404'
 				element={<NotFoundPage />}

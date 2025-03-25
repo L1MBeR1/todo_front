@@ -1,10 +1,10 @@
-import { Input } from '@heroui/react'
+import { Textarea } from '@heroui/react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useEffect, useRef, useState } from 'react'
 
 import { projectService } from '../../services/projects'
 
-export const GroupName = ({ name, projectId, id }) => {
+export const TaskName = ({ name, projectId, id }) => {
 	const [isChangingName, setIsChangingName] = useState(false)
 	const [newName, setNewName] = useState('')
 	const inputRef = useRef(null)
@@ -31,7 +31,7 @@ export const GroupName = ({ name, projectId, id }) => {
 
 	const queryClient = useQueryClient()
 	const { mutate } = useMutation({
-		mutationKey: ['update-group-name'],
+		mutationKey: ['update-task-name'],
 		mutationFn: () =>
 			projectService.updateGroup(id, projectId, { name: newName }),
 		onSuccess(response) {
@@ -49,8 +49,8 @@ export const GroupName = ({ name, projectId, id }) => {
 
 	return (
 		<>
-			{isChangingName && projectId ? (
-				<Input
+			{isChangingName ? (
+				<Textarea
 					radius='sm'
 					variant='bordered'
 					value={newName}
@@ -64,7 +64,7 @@ export const GroupName = ({ name, projectId, id }) => {
 				/>
 			) : (
 				<p
-					className='font-semibold cursor-pointer select-none'
+					className='font-medium cursor-pointer select-none text-xl'
 					onClick={() => {
 						setIsChangingName(true)
 						setNewName(name)

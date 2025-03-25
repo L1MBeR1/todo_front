@@ -1,13 +1,13 @@
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import { Card } from '@heroui/react'
+import { Card, Checkbox } from '@heroui/react'
 import { useEffect, useState } from 'react'
 
 import { useDrawer } from '../../hooks/contexts/useDrawer'
 
 import { TaskDate } from './taskDate'
 
-export const KanbanTaskCard = ({ data }) => {
+export const ListTaskCard = ({ data }) => {
 	const { openDrawer, isDrawerOpen, changeTask, taskId } = useDrawer()
 	const [isSelected, setIsSelected] = useState(false)
 	const handleCardClick = () => {
@@ -41,12 +41,13 @@ export const KanbanTaskCard = ({ data }) => {
 			onClick={handleCardClick}
 		>
 			<Card
-				className={`p-4 min-h-28 ${isSelected && 'outline-slate-600'} `}
+				className={`p-[10px] h-12 ${isSelected && 'outline-slate-600'} `}
 				shadow='sm'
 				radius='sm'
 			>
-				<div className='flex flex-col'>
-					<div className='flex flex-col gap-1.5'>
+				<div className='flex flex-row'>
+					<Checkbox radius='sm' />
+					<div className='flex flex-row gap-1.5'>
 						{data.dueDate && <TaskDate date={data.dueDate} />}
 						<p>{data.title}</p>
 					</div>

@@ -15,11 +15,32 @@ class ProjectService {
 
 	async createProject(data) {
 		const response = await axiosWithAuth.post(`${this.BASE_URL}`, data)
+		return response.data
+	}
+	async updateProject(id, data) {
+		const response = await axiosWithAuth.put(`${this.BASE_URL}/${id}`, data)
+		return response.data
+	}
+
+	async deleteProject(id) {
+		const response = await axiosWithAuth.delete(`${this.BASE_URL}/${id}`)
 		return response
 	}
 
 	async getProjectGroups(id) {
 		const response = await axiosWithAuth.get(`${this.BASE_URL}/${id}/groups`)
+		return response.data
+	}
+
+	async getProjectDetails(id) {
+		const response = await axiosWithAuth.get(`${this.BASE_URL}/${id}`)
+		return response.data
+	}
+
+	async getProjectTasks(id, completed = false) {
+		const response = await axiosWithAuth.get(
+			`${this.BASE_URL}/${id}/tasks?completed=${completed}`
+		)
 		return response.data
 	}
 
@@ -40,6 +61,7 @@ class ProjectService {
 	}
 
 	async updateGroup(id, projectId, data) {
+		console.log(id, projectId, data)
 		const response = await axiosWithAuth.put(
 			`${this.BASE_URL}/${projectId}/groups/${id}`,
 			{ ...data }

@@ -3,9 +3,12 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Plus } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 
+import { useDrawer } from '../../hooks/contexts/useDrawer'
 import { groupService } from '../../services/groups'
 
 export const CreateTaskButton = ({ groupId, projectId }) => {
+	const { openDrawer } = useDrawer()
+
 	const [isCreating, setIsCreating] = useState(false)
 	const [name, setName] = useState('')
 	const inputRef = useRef(null)
@@ -20,12 +23,13 @@ export const CreateTaskButton = ({ groupId, projectId }) => {
 	const { mutate } = useMutation({
 		mutationKey: ['create-task'],
 		mutationFn: data => groupService.createGroupTasks(groupId, data),
-		onSuccess(response) {
-			console.log(response)
+		onSuccess(data) {
+			console.log(data)
 			queryClient.refetchQueries({
 				queryKey: [`group/${groupId}/tasks`],
 				type: 'active'
 			})
+			openDrawer(data, data.id)
 		},
 		onSettled() {
 			setIsCreating(false)

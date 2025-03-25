@@ -1,7 +1,8 @@
 import { Button, Divider, Input, Link } from '@heroui/react'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { useNavigate } from 'react-router-dom'
 import validator from 'validator'
 
 import { APP_PAGES } from '../../../config/pageConfig'
@@ -21,8 +22,7 @@ export const RegisterForm = () => {
 	const [password, setPassword] = useState('')
 	const [loading, setLoading] = useState(false)
 
-	const queryClient = useQueryClient()
-
+	const navigate = useNavigate()
 	const email = watch('email')
 
 	const handleEmailBlur = () => {
@@ -44,17 +44,9 @@ export const RegisterForm = () => {
 			setLoading(true)
 			// setError({ title: null, description: null })
 		},
-		onSuccess(response) {
-			// if (!response.data.emailVerified) push(APP_PAGES.VERIFY_EMAIL)
-			// else {
-			// 	queryClient.refetchQueries({ queryKey: ['profile'], type: 'active' })
-			// 	push(APP_PAGES.DASHBOARD.HOME)
-			// 	addToast({
-			// 		title: 'Успешный вход в аккаунт!',
-			// 		color: 'success'
-			// 	})
-			// }
-			// reset()
+		onSuccess() {
+			navigate(APP_PAGES.WORKSPACE.HOME)
+			reset()
 		},
 		onError(error) {
 			// console.log(error)
@@ -122,12 +114,22 @@ export const RegisterForm = () => {
 						}
 					}}
 				/>
-				<Button type='submit'></Button>
+				<Button
+					type='submit'
+					isLoading={loading}
+				>
+					Создать аккаунт
+				</Button>
 			</form>
 			<Divider />
 			<div className='flex flex-col'>
 				<p>Уже есть аккаунт?</p>
-				<Link href={APP_PAGES.LOGIN}>Войти</Link>
+				<Link
+					href={APP_PAGES.LOGIN}
+					isDisabled={loading}
+				>
+					Войти
+				</Link>
 			</div>
 		</div>
 	)

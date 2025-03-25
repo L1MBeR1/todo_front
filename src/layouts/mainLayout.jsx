@@ -2,11 +2,10 @@ import { CircularProgress } from '@heroui/react'
 import { useEffect, useState } from 'react'
 import { Navigate, Outlet } from 'react-router-dom'
 
-import { WorkSpaceSidebar } from '../components/sidebars/workspaceSidebar'
 import { APP_PAGES } from '../config/pageConfig'
 import { authManager } from '../services/auth-token'
 
-export const WorkSpaceLayout = () => {
+export const MainLayout = () => {
 	const [token, setToken] = useState(null)
 	const [loading, setLoading] = useState(true)
 	useEffect(() => {
@@ -26,13 +25,8 @@ export const WorkSpaceLayout = () => {
 			</section>
 		)
 	}
-	if (!token) {
-		return <Navigate to={APP_PAGES.LOGIN} />
+	if (token) {
+		return <Navigate to={APP_PAGES.WORKSPACE.HOME} />
 	}
-	return (
-		<main className='flex flex-row w-full h-screen'>
-			<WorkSpaceSidebar />
-			<Outlet />
-		</main>
-	)
+	return <Outlet />
 }

@@ -10,11 +10,11 @@ import { EllipsisVertical } from 'lucide-react'
 
 import { GroupPopover } from '../popovers/groupPopover'
 
-import { KanbanTaskCard } from './KanbanTaskCard'
 import { CreateTaskButton } from './createTaskButton'
 import { GroupName } from './groupName'
+import { ListTaskCard } from './listTaskCard'
 
-export const Group = ({ data, projectId, activeId, tasks }) => {
+export const ListGroup = ({ data, projectId, activeId, tasks }) => {
 	const { setNodeRef } = useDroppable({
 		id: `group-${data.id}`,
 		data: {
@@ -92,7 +92,7 @@ export const Group = ({ data, projectId, activeId, tasks }) => {
 						disabled={activeId ? activeId.startsWith('group-') : false}
 					>
 						{tasks.map(task => (
-							<KanbanTaskCard
+							<ListTaskCard
 								key={task.id}
 								data={task}
 							/>

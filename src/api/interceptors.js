@@ -74,9 +74,9 @@ axiosWithAuth.interceptors.response.use(
 				console.log('Failed to refresh token, redirecting to login')
 				authManager.clearToken()
 
-				// if (typeof window !== 'undefined') {
-				// 	window.location.href = '/login'
-				// }
+				if (typeof window !== 'undefined') {
+					window.location.href = '/login'
+				}
 
 				throw error
 			}

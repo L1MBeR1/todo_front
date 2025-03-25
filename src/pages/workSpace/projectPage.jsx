@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { ProjectMainSection } from '../../components/sections/projects/projectMainSection'
 import { APP_PAGES } from '../../config/pageConfig'
 import useProject from '../../hooks/projects/useProject'
+import { DrawerProvider } from '../../providers/drawerProvider'
 
 export const ProjectPage = () => {
 	const { id } = useParams()
@@ -13,5 +14,12 @@ export const ProjectPage = () => {
 	if (isError) {
 		navigate(APP_PAGES.NOT_FOUND)
 	}
-	return <ProjectMainSection projectId={id} />
+	return (
+		<DrawerProvider>
+			<ProjectMainSection
+				projectId={id}
+				projectData={data}
+			/>
+		</DrawerProvider>
+	)
 }

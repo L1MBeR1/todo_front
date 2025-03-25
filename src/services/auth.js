@@ -1,4 +1,4 @@
-import { axiosClassic } from '../api/interceptors'
+import { axiosClassic, axiosWithAuth } from '../api/interceptors'
 
 import { authManager } from './auth-token'
 
@@ -25,6 +25,10 @@ export const authService = {
 			authManager.setToken(response.data.accessToken)
 		}
 
+		return response
+	},
+	async logout() {
+		const response = await axiosWithAuth.post('/auth/logout')
 		return response
 	},
 
