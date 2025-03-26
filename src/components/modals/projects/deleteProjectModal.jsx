@@ -45,7 +45,6 @@ export const DeleteProjectModal = ({ isOpen, onOpenChange, id }) => {
 
 	return (
 		<Modal
-			isDismissable={false}
 			isOpen={isOpen}
 			onOpenChange={onOpenChange}
 			className='p-2'
@@ -71,7 +70,7 @@ export const DeleteProjectModal = ({ isOpen, onOpenChange, id }) => {
 								radius='sm'
 								className='font-medium'
 								size='md'
-								color='primary'
+								color='default'
 								variant='flat'
 								isDisabled={loading}
 								onPress={onClose}

@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 
 import { projectService } from '../../services/projects'
 
-export const TaskName = ({ name, projectId, id }) => {
+export const DrawerTaskName = ({ name, projectId, id }) => {
 	const [isChangingName, setIsChangingName] = useState(false)
 	const [newName, setNewName] = useState('')
 	const inputRef = useRef(null)
@@ -52,19 +52,21 @@ export const TaskName = ({ name, projectId, id }) => {
 			{isChangingName ? (
 				<Textarea
 					radius='sm'
+					maxLength={150}
 					variant='bordered'
 					value={newName}
 					ref={inputRef}
 					onBlur={() => {
 						handleBlur()
 					}}
+					maxRows={4}
 					onValueChange={value => {
 						handleChange(value)
 					}}
 				/>
 			) : (
 				<p
-					className='font-medium cursor-pointer select-none text-xl'
+					className='font-medium cursor-pointer select-none text-xl break-words max-w-64'
 					onClick={() => {
 						setIsChangingName(true)
 						setNewName(name)

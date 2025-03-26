@@ -1,13 +1,15 @@
 import { Input } from '@heroui/react'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 import { useEffect, useRef, useState } from 'react'
 
+import { useProjectElements } from '../../hooks/contexts/useProjectElements'
 import { projectService } from '../../services/projects'
 
-export const GroupName = ({ name, projectId, id }) => {
+export const GroupName = ({ name, projectId, id, isList = false }) => {
 	const [isChangingName, setIsChangingName] = useState(false)
 	const [newName, setNewName] = useState('')
 	const inputRef = useRef(null)
+	const { updateGroup } = useProjectElements()
 
 	const handleBlur = () => {
 		if (newName.length === 0 || newName === name) {
@@ -17,6 +19,17 @@ export const GroupName = ({ name, projectId, id }) => {
 		}
 		mutate()
 		return
+	}
+
+	const handleKeyDown = e => {
+		if (e.key === 'Enter') {
+			e.preventDefault()
+			handleBlur()
+		}
+		if (e.key === 'Escape') {
+			setIsChangingName(false)
+			setNewName('')
+		}
 	}
 
 	useEffect(() => {
@@ -29,17 +42,13 @@ export const GroupName = ({ name, projectId, id }) => {
 		setNewName(value)
 	}
 
-	const queryClient = useQueryClient()
 	const { mutate } = useMutation({
 		mutationKey: ['update-group-name'],
 		mutationFn: () =>
 			projectService.updateGroup(id, projectId, { name: newName }),
-		onSuccess(response) {
-			console.log(response)
-			queryClient.refetchQueries({
-				queryKey: [`project/${projectId}/groups`],
-				type: 'active'
-			})
+		onSuccess(data) {
+			console.log(data)
+			updateGroup(data.id, { name: data.name })
 		},
 		onSettled() {
 			setIsChangingName(false)
@@ -58,13 +67,15 @@ export const GroupName = ({ name, projectId, id }) => {
 					onBlur={() => {
 						handleBlur()
 					}}
+					onKeyDown={handleKeyDown}
 					onValueChange={value => {
 						handleChange(value)
 					}}
+					maxLength={150}
 				/>
 			) : (
 				<p
-					className='font-semibold cursor-pointer select-none'
+					className={`font-semibold cursor-pointer select-none break-words ${isList ? 'max-w-[80%]' : 'max-w-56'}`}
 					onClick={() => {
 						setIsChangingName(true)
 						setNewName(name)

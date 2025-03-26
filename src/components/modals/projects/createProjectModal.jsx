@@ -50,7 +50,6 @@ const CreateProjectModal = ({ isOpen, onOpenChange }) => {
 
 	return (
 		<Modal
-			isDismissable={false}
 			isOpen={isOpen}
 			onOpenChange={onOpenChange}
 			className='p-2 '

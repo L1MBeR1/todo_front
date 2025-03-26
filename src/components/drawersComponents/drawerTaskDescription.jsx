@@ -4,13 +4,13 @@ import { useEffect, useRef, useState } from 'react'
 
 import { projectService } from '../../services/projects'
 
-export const TaskDescription = ({ description, projectId, id }) => {
+export const DrawerTaskDescription = ({ description, projectId, id }) => {
 	const [isChangingDescription, setIsChangingDescription] = useState(false)
 	const [newDescription, setNewDescription] = useState('')
 	const inputRef = useRef(null)
 
 	const handleBlur = () => {
-		if (newDescription.length === 0 || newDescription === name) {
+		if (newDescription.length === 0 || newDescription === description) {
 			setNewDescription(false)
 			newDescription('')
 			return
@@ -33,7 +33,9 @@ export const TaskDescription = ({ description, projectId, id }) => {
 	const { mutate } = useMutation({
 		mutationKey: ['update-task-description'],
 		mutationFn: () =>
-			projectService.updateGroup(id, projectId, { name: newDescription }),
+			projectService.updateGroup(id, projectId, {
+				description: newDescription
+			}),
 		onSuccess(response) {
 			console.log(response)
 			queryClient.refetchQueries({
@@ -58,6 +60,7 @@ export const TaskDescription = ({ description, projectId, id }) => {
 					onBlur={() => {
 						handleBlur()
 					}}
+					placeholder='Введите описание задачи'
 					onValueChange={value => {
 						handleChange(value)
 					}}

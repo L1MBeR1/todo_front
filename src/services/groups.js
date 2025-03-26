@@ -16,6 +16,13 @@ class GroupService {
 		return response.data
 	}
 
+	async deleteTask(id, groupId) {
+		const response = await axiosWithAuth.delete(
+			`${this.BASE_URL}/${groupId}/tasks/${id}`
+		)
+		return response
+	}
+
 	async createGroupTasks(id, data) {
 		const response = await axiosWithAuth.post(
 			`${this.BASE_URL}/${id}/tasks`,

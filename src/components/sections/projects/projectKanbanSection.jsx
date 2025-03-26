@@ -5,14 +5,13 @@ import {
 } from '@dnd-kit/sortable'
 import { createPortal } from 'react-dom'
 
+import { useProjectElements } from '../../../hooks/contexts/useProjectElements'
 import { useDragAndDrop } from '../../../hooks/useDragAndDrop'
 import { KanbanTaskCard } from '../../projectComponents/KanbanTaskCard'
 import { CreateGroup } from '../../projectComponents/createGroup'
 import { Group } from '../../projectComponents/group'
 
-export const ProjectKanbanSection = ({ groups, projectId, tasks }) => {
-	// const { handleMouseDown, handleMouseMove, handleMouseUp, handleMouseLeave } =
-	// 	useDraggableScroll()
+export const ProjectKanbanSection = ({ projectId }) => {
 	const { setNodeRef } = useDroppable({
 		id: 'kanban'
 	})
@@ -23,12 +22,12 @@ export const ProjectKanbanSection = ({ groups, projectId, tasks }) => {
 		handleDragOver,
 		handleDragEnd,
 		activeId,
-		activeData,
-		initialGroups,
-		initialTasks
-	} = useDragAndDrop({ groups, tasks })
+		activeData
+	} = useDragAndDrop()
 
-	console.log(initialGroups)
+	const { groups, tasks } = useProjectElements()
+
+	console.log(groups)
 	return (
 		<DndContext
 			sensors={sensors}
@@ -38,32 +37,36 @@ export const ProjectKanbanSection = ({ groups, projectId, tasks }) => {
 			// collisionDetection={closestCorners}
 		>
 			<section
-				className='flex flex-col w-full select-none grow pb-8 overflow-x-auto pt-4'
+				className='flex flex-col w-full select-none grow p-8 overflow-x-auto pt-4'
 				ref={setNodeRef}
 			>
 				<div className='flex flex-row w-full h-full space-x-8 max-h-full'>
 					<SortableContext
-						items={initialGroups?.map(group => `group-${group.id}`)}
+						items={groups?.map(group => `group-${group.id}`)}
 						strategy={horizontalListSortingStrategy}
 						// disabled={activeId?.startsWith('task-')}
 					>
-						{initialGroups &&
-							initialGroups.map(group => (
-								<Group
-									key={group.id}
-									data={group}
-									projectId={projectId}
-									activeId={activeId}
-									tasks={initialTasks[group.id] || []}
-								/>
-							))}
+						{groups &&
+							groups.map(group => {
+								if (group.isDelete) return null
+
+								return (
+									<Group
+										key={group.id}
+										data={group}
+										projectId={projectId}
+										activeId={activeId}
+										tasks={tasks[group.id] || []}
+									/>
+								)
+							})}
 					</SortableContext>
 					{createPortal(
 						<DragOverlay className='opacity-85'>
 							{!activeId ? null : activeId.startsWith('group-') ? (
 								<Group
 									data={activeData}
-									tasks={initialTasks[activeData.id] || []}
+									tasks={tasks[activeData.id] || []}
 								/>
 							) : (
 								<KanbanTaskCard data={activeData} />

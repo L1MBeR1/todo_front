@@ -21,11 +21,6 @@ export const ListGroup = ({ data, projectId, activeId, tasks }) => {
 			id: data.id
 		}
 	})
-	// const style = {
-	// 	color: isOver ? 'green' : undefined
-	// }
-	// console.log(activeId ? activeId.startsWith('group-') : false)
-	// console.log(tasks)
 	const {
 		attributes,
 		listeners,
@@ -46,7 +41,7 @@ export const ListGroup = ({ data, projectId, activeId, tasks }) => {
 		<div
 			ref={setGroupRef}
 			style={style}
-			className={`flex flex-col max-w-80 w-full min-w-80 border-1 rounded-lg h-fit gap-5 max-h-full group bg-slate-50 `}
+			className={`flex flex-col  w-full min-w-80 border-1 rounded-lg h-fit max-h-full group bg-slate-50 group `}
 		>
 			<header
 				{...listeners}
@@ -58,11 +53,11 @@ export const ListGroup = ({ data, projectId, activeId, tasks }) => {
 						name={data.name}
 						projectId={projectId}
 						id={data.id}
+						isList
 					/>
 					<GroupPopover
-						id={data.id}
 						projectId={projectId}
-						name={data.name}
+						data={data}
 					>
 						<Button
 							radius='sm'
@@ -93,6 +88,7 @@ export const ListGroup = ({ data, projectId, activeId, tasks }) => {
 					>
 						{tasks.map(task => (
 							<ListTaskCard
+								projectId={projectId}
 								key={task.id}
 								data={task}
 							/>
@@ -100,7 +96,9 @@ export const ListGroup = ({ data, projectId, activeId, tasks }) => {
 					</SortableContext>
 				)}
 			</div>
-			<CreateTaskButton groupId={data.id} />
+			<div className='w-full opacity-0 group-hover:opacity-100'>
+				<CreateTaskButton groupId={data.id} />
+			</div>
 		</div>
 	)
 }

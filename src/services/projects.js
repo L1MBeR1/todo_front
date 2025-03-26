@@ -60,6 +60,13 @@ class ProjectService {
 		return response.data
 	}
 
+	async deleteTask(id, projectId) {
+		const response = await axiosWithAuth.delete(
+			`${this.BASE_URL}/${projectId}/tasks/${id}`
+		)
+		return response
+	}
+
 	async updateGroup(id, projectId, data) {
 		console.log(id, projectId, data)
 		const response = await axiosWithAuth.put(

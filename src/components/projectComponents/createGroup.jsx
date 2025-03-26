@@ -1,8 +1,9 @@
-import { Button, Input } from '@heroui/react'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { Button, Input, addToast } from '@heroui/react'
+import { useMutation } from '@tanstack/react-query'
 import { Plus } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 
+import { useProjectElements } from '../../hooks/contexts/useProjectElements'
 import { projectService } from '../../services/projects'
 
 export const CreateGroup = ({ projectId }) => {
@@ -10,22 +11,22 @@ export const CreateGroup = ({ projectId }) => {
 	const [name, setName] = useState('')
 	const inputRef = useRef(null)
 
+	const { addGroup } = useProjectElements()
+
 	useEffect(() => {
 		if (isCreating && inputRef.current) {
 			inputRef.current.focus()
 		}
 	}, [isCreating])
 
-	const queryClient = useQueryClient()
 	const { mutate } = useMutation({
 		mutationKey: ['create-group'],
 		mutationFn: data => projectService.createGroup(projectId, data),
-		onSuccess(response) {
-			console.log(response)
-			queryClient.refetchQueries({
-				queryKey: [`project/${projectId}/groups`],
-				type: 'active'
-			})
+		onSuccess(data) {
+			addGroup(data)
+		},
+		onError() {
+			addToast({ title: 'Ошибка при создании группы', color: 'danger' })
 		},
 		onSettled() {
 			setIsCreating(false)
@@ -61,6 +62,7 @@ export const CreateGroup = ({ projectId }) => {
 			{isCreating ? (
 				<div className='w-full'>
 					<Input
+						maxLength={150}
 						variant='bordered'
 						value={name}
 						ref={inputRef}
@@ -72,6 +74,7 @@ export const CreateGroup = ({ projectId }) => {
 			) : (
 				<div className='w-full'>
 					<Button
+						radius='sm'
 						className='justify-start'
 						startContent={<Plus size={18} />}
 						fullWidth

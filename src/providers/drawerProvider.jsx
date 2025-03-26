@@ -29,6 +29,7 @@ export const DrawerProvider = ({ children }) => {
 			value={{
 				isDrawerOpen,
 				drawerContent,
+				setDrawerContent,
 				taskId,
 				openDrawer,
 				closeDrawer,

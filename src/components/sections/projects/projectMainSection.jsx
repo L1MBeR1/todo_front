@@ -13,23 +13,26 @@ import useProjectTasks from '../../../hooks/projects/useProjectTasks'
 import { ProjectProvider } from '../../../providers/projectProvider'
 import { TaskDrawer } from '../../drawers/taskDrawer'
 import { ProjectPopover } from '../../popovers/projectPopover'
+import { CompleteCounter } from '../../projectComponents/completeCounter'
 
 import { ProjectKanbanSection } from './projectKanbanSection'
 import { ProjectListSection } from './projectListSection'
 
 export const ProjectMainSection = ({ projectData, projectId }) => {
 	const { data: groups, isLoading } = useProjectGroups(projectId)
-	const [isKanban, setIsKanban] = useState(true)
+	const [isKanban, setIsKanban] = useState(false)
 	const { data: tasks, isLoading: isTaskLoading } = useProjectTasks(projectId)
 
-	const { data: tasksCompleted } = useProjectTasks(projectId, true)
 	const { isDrawerOpen } = useDrawer()
 	return (
-		<>
+		<ProjectProvider
+			initialGroups={groups}
+			initialTasks={tasks}
+		>
 			<main
-				className={`flex flex-col w-full h-screen overflow-hidden transition-all duration-300 relative p-8 pb-0 gap-6 ${isDrawerOpen && 'pr-[416px]'}`}
+				className={`flex flex-col w-full h-screen overflow-hidden transition-all duration-300 relative pt-8 pb-0 gap-6 ${isDrawerOpen && 'pr-96'}`}
 			>
-				<div className='flex flex-row'>
+				<div className='flex flex-row px-8'>
 					<Breadcrumbs className='font-semibold pointer-events-none'>
 						<BreadcrumbItem>Мои проекты</BreadcrumbItem>
 						<BreadcrumbItem>
@@ -37,7 +40,7 @@ export const ProjectMainSection = ({ projectData, projectId }) => {
 						</BreadcrumbItem>
 					</Breadcrumbs>
 				</div>
-				<div className='w-full flex flex-row justify-between'>
+				<div className='w-full flex flex-row justify-between px-8'>
 					<div className='flex flex-row gap-4 items-center'>
 						<p className='font-medium text-4xl max-w-[700px] truncate leading-tight'>
 							{projectData?.name}
@@ -52,14 +55,8 @@ export const ProjectMainSection = ({ projectData, projectId }) => {
 							</Button>
 						</ProjectPopover>
 					</div>
-					<div className='flex flex-row gap-3'>
-						<Button
-							className='font-semibold'
-							variant='light'
-							radius='sm'
-						>
-							Сегодня выполнено
-						</Button>
+					<div className='flex flex-row gap-5'>
+						<CompleteCounter projectId={projectId} />
 						<div className='flex flex-row gap-3'>
 							<Button
 								radius='sm'
@@ -89,25 +86,25 @@ export const ProjectMainSection = ({ projectData, projectId }) => {
 						<CircularProgress />
 					</div>
 				) : (
-					<ProjectProvider>
+					<>
 						{isKanban ? (
 							<ProjectKanbanSection
-								groups={groups}
-								tasks={tasks}
+								// groups={groups}
+								// tasks={tasks}
 								projectId={projectId}
 							/>
 						) : (
 							<ProjectListSection
-								groups={groups}
-								tasks={tasks}
+								// groups={groups}
+								// tasks={tasks}
 								projectId={projectId}
 							/>
 						)}
-					</ProjectProvider>
+					</>
 				)}
 			</main>
 
-			<TaskDrawer />
-		</>
+			<TaskDrawer projectId={projectId} />
+		</ProjectProvider>
 	)
 }

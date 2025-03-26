@@ -14,18 +14,16 @@ export const Provider = ({ children }) => {
 				useHref={useHref}
 			>
 				<ToastProvider
-					toastOffset={10}
+					toastOffset={30}
+					placement='top-center'
 					toastProps={{
-						radius: 'md',
+						radius: 'sm',
 						color: 'default',
 						variant: 'flat',
-						timeout: 3000,
-						classNames: {
-							base: 'bg-background'
-						}
+						timeout: 4000
 					}}
 				/>
-				{children}
+				<main className='light'>{children}</main>
 				<ReactQueryDevtools initialIsOpen={false} />
 			</HeroUIProvider>
 		</QueryClientProvider>

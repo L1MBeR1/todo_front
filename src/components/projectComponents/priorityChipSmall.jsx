@@ -1,7 +1,7 @@
 import { Chip } from '@heroui/react'
 import { Flag } from 'lucide-react'
 
-export const PriorityChip = ({ priority }) => {
+export const PriorityChipSmall = ({ priority }) => {
 	const getPriorityConfig = () => {
 		switch (priority) {
 			case 0:
@@ -32,12 +32,9 @@ export const PriorityChip = ({ priority }) => {
 			color={config.color}
 			radius='full'
 			variant='flat'
-			className={`bg-${config.color}-100 border-1 border-${config.color}-200`}
+			className={`bg-${config.color}-100 border-1 border-${config.color}-200 aspect-square flex items-center justify-center`}
 		>
-			<div className={`items-center flex flex-row text-${config.color} gap-1 `}>
-				<Flag size={14} />
-				<p className='text-sm'> {config.label}</p>
-			</div>
+			<Flag size={15} />
 		</Chip>
 	)
 }

@@ -1,16 +1,18 @@
-import { Button, Input } from '@heroui/react'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { Button, Input, addToast } from '@heroui/react'
+import { useMutation } from '@tanstack/react-query'
 import { Plus } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 
 import { useDrawer } from '../../hooks/contexts/useDrawer'
+import { useProjectElements } from '../../hooks/contexts/useProjectElements'
 import { groupService } from '../../services/groups'
 
-export const CreateTaskButton = ({ groupId, projectId }) => {
+export const CreateTaskButton = ({ groupId }) => {
 	const { openDrawer } = useDrawer()
 
 	const [isCreating, setIsCreating] = useState(false)
 	const [name, setName] = useState('')
+	const { addTask } = useProjectElements()
 	const inputRef = useRef(null)
 
 	useEffect(() => {
@@ -19,17 +21,18 @@ export const CreateTaskButton = ({ groupId, projectId }) => {
 		}
 	}, [isCreating])
 
-	const queryClient = useQueryClient()
 	const { mutate } = useMutation({
 		mutationKey: ['create-task'],
 		mutationFn: data => groupService.createGroupTasks(groupId, data),
+		onMutate() {},
 		onSuccess(data) {
 			console.log(data)
-			queryClient.refetchQueries({
-				queryKey: [`group/${groupId}/tasks`],
-				type: 'active'
-			})
+			addTask(groupId, data)
+
 			openDrawer(data, data.id)
+		},
+		onError() {
+			addToast({ title: 'Ошибка при создании задачи', color: 'danger' })
 		},
 		onSettled() {
 			setIsCreating(false)
@@ -47,7 +50,7 @@ export const CreateTaskButton = ({ groupId, projectId }) => {
 			setName('')
 			return
 		}
-		mutate({ title: name })
+		mutate({ title: name, priority: 1 })
 	}
 
 	const handleNameChange = value => {
@@ -61,7 +64,7 @@ export const CreateTaskButton = ({ groupId, projectId }) => {
 	}
 
 	return (
-		<div className='w-full'>
+		<div className='w-full px-4'>
 			{isCreating ? (
 				<div className='w-full'>
 					<Input
@@ -72,11 +75,13 @@ export const CreateTaskButton = ({ groupId, projectId }) => {
 						onBlur={handleBlurCreateTask}
 						onValueChange={handleNameChange}
 						onKeyDown={handleKeyDown}
+						maxLength={150}
 					/>
 				</div>
 			) : (
 				<div className='w-full'>
 					<Button
+						radius='sm'
 						className='border-0'
 						startContent={<Plus size={18} />}
 						fullWidth

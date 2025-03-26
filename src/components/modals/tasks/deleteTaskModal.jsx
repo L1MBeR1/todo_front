@@ -12,25 +12,29 @@ import {
 import { useMutation } from '@tanstack/react-query'
 import { useState } from 'react'
 
+import { useDrawer } from '../../../hooks/contexts/useDrawer'
 import { useProjectElements } from '../../../hooks/contexts/useProjectElements'
-import { projectService } from '../../../services/projects'
+import { groupService } from '../../../services/groups'
 
-const DeleteGroupModal = ({ isOpen, onOpenChange, data, projectId }) => {
+export const DeleteTaskModal = ({ isOpen, onOpenChange, data }) => {
 	const [loading, setLoading] = useState(false)
-	const { removeGroup } = useProjectElements()
+	const { removeTask } = useProjectElements()
+	const { closeDrawer } = useDrawer()
+
 	console.log(data)
 	const createProject = useMutation({
-		mutationKey: ['create-project'],
-		mutationFn: () => projectService.deleteGroup(data.id, projectId),
+		mutationKey: ['delete-task'],
+		mutationFn: () => groupService.deleteTask(data.id, data.kanbanGroupId),
 		onMutate() {
 			setLoading(true)
 		},
 		onSuccess() {
 			onOpenChange(false)
-			removeGroup(data.id)
+			removeTask(data.kanbanGroupId, data.id)
+			closeDrawer()
 		},
 		onError() {
-			addToast({ title: 'Ошибка при удалении группы', color: 'danger' })
+			addToast({ title: 'Ошибка при удалении задачи', color: 'danger' })
 		},
 		onSettled() {
 			setLoading(false)
@@ -52,17 +56,13 @@ const DeleteGroupModal = ({ isOpen, onOpenChange, data, projectId }) => {
 				{onClose => (
 					<>
 						<ModalHeader className='font-primary text-xl font-semibold'>
-							Удаление группы
+							Удаление задачи
 						</ModalHeader>
 						<ModalBody>
-							<div className='flex flex-col gap-4 w-full'>
-								<p>
-									Вы уверены, что хотите удалить группу{' '}
-									<span className='font-semibold'>{data.name}</span>?
-								</p>
-								<p>
-									При удалении группы все задачи, связанные с ней, будут
-									удалены.
+							<div className='flex flex-col gap-0.5 w-full'>
+								<p>Вы уверены, что хотите удалить задачу</p>
+								<p className='max-w-full truncate'>
+									<span className='font-semibold'>{data.title}</span> ?
 								</p>
 							</div>
 						</ModalBody>
@@ -98,5 +98,3 @@ const DeleteGroupModal = ({ isOpen, onOpenChange, data, projectId }) => {
 		</Modal>
 	)
 }
-
-export default DeleteGroupModal

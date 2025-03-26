@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react'
 
 import { useDrawer } from '../../hooks/contexts/useDrawer'
 
+import { PriorityChip } from './priorityChip'
 import { TaskDate } from './taskDate'
 
 export const KanbanTaskCard = ({ data }) => {
@@ -42,13 +43,19 @@ export const KanbanTaskCard = ({ data }) => {
 		>
 			<Card
 				className={`p-4 min-h-28 ${isSelected && 'outline-slate-600'} `}
+				style={{
+					backgroundColor: data.colorHashCode && `#${data.colorHashCode}`
+				}}
 				shadow='sm'
 				radius='sm'
 			>
-				<div className='flex flex-col'>
+				<div className='flex flex-col justify-between grow'>
 					<div className='flex flex-col gap-1.5'>
 						{data.dueDate && <TaskDate date={data.dueDate} />}
-						<p>{data.title}</p>
+						<p className='break-words'>{data.title}</p>
+					</div>
+					<div className='flex justify-end'>
+						<PriorityChip priority={data.priority} />
 					</div>
 				</div>
 			</Card>

@@ -2,14 +2,13 @@ import { DndContext, DragOverlay, useDroppable } from '@dnd-kit/core'
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { createPortal } from 'react-dom'
 
+import { useProjectElements } from '../../../hooks/contexts/useProjectElements'
 import { useDragAndDrop } from '../../../hooks/useDragAndDrop'
-import { KanbanTaskCard } from '../../projectComponents/KanbanTaskCard'
 import { CreateGroup } from '../../projectComponents/createGroup'
 import { ListGroup } from '../../projectComponents/listGroup'
+import { ListTaskCard } from '../../projectComponents/listTaskCard'
 
-export const ProjectListSection = ({ groups, projectId, tasks }) => {
-	// const { handleMouseDown, handleMouseMove, handleMouseUp, handleMouseLeave } =
-	// 	useDraggableScroll()
+export const ProjectListSection = ({ projectId }) => {
 	const { setNodeRef } = useDroppable({
 		id: 'kanban'
 	})
@@ -20,12 +19,11 @@ export const ProjectListSection = ({ groups, projectId, tasks }) => {
 		handleDragOver,
 		handleDragEnd,
 		activeId,
-		activeData,
-		initialGroups,
-		initialTasks
-	} = useDragAndDrop({ groups, tasks })
+		activeData
+	} = useDragAndDrop()
 
-	console.log(initialGroups)
+	const { groups, tasks } = useProjectElements()
+
 	return (
 		<DndContext
 			sensors={sensors}
@@ -35,23 +33,23 @@ export const ProjectListSection = ({ groups, projectId, tasks }) => {
 			// collisionDetection={closestCorners}
 		>
 			<section
-				className='flex flex-col w-full select-none grow overflow-y-auto pt-4'
+				className='flex flex-col w-full select-none grow p-8 overflow-y-auto pt-4'
 				ref={setNodeRef}
 			>
-				<div className='flex flex-col w-full h-full space-y-8 max-h-full'>
+				<div className='flex flex-col max-w-4xl h-full space-y-4 max-h-full'>
 					<SortableContext
-						items={initialGroups?.map(group => `group-${group.id}`)}
+						items={groups?.map(group => `group-${group.id}`)}
 						strategy={verticalListSortingStrategy}
 						// disabled={activeId?.startsWith('task-')}
 					>
-						{initialGroups &&
-							initialGroups.map(group => (
+						{groups &&
+							groups.map(group => (
 								<ListGroup
 									key={group.id}
 									data={group}
 									projectId={projectId}
 									activeId={activeId}
-									tasks={initialTasks[group.id] || []}
+									tasks={tasks[group.id] || []}
 								/>
 							))}
 					</SortableContext>
@@ -60,10 +58,10 @@ export const ProjectListSection = ({ groups, projectId, tasks }) => {
 							{!activeId ? null : activeId.startsWith('group-') ? (
 								<ListGroup
 									data={activeData}
-									tasks={initialTasks[activeData.id] || []}
+									tasks={tasks[activeData.id] || []}
 								/>
 							) : (
-								<KanbanTaskCard data={activeData} />
+								<ListTaskCard data={activeData} />
 							)}
 						</DragOverlay>,
 						document.body

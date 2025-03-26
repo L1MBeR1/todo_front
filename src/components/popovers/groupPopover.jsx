@@ -13,7 +13,7 @@ import { useState } from 'react'
 
 import DeleteGroupModal from '../modals/projects/deleteGroupModal'
 
-export const GroupPopover = ({ children, id, projectId, name }) => {
+export const GroupPopover = ({ children, projectId, data }) => {
 	const [openAccountPopover, setOpenAccountPopover] = useState(false)
 
 	const { isOpen, onOpen, onOpenChange } = useDisclosure()
@@ -23,9 +23,8 @@ export const GroupPopover = ({ children, id, projectId, name }) => {
 			<DeleteGroupModal
 				isOpen={isOpen}
 				onOpenChange={onOpenChange}
-				id={id}
+				data={data}
 				projectId={projectId}
-				name={name}
 			/>
 			<Popover
 				shadow='md'

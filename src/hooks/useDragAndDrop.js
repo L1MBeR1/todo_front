@@ -6,18 +6,18 @@ import {
 	useSensors
 } from '@dnd-kit/core'
 import { useMutation } from '@tanstack/react-query'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 import { groupService } from '../services/groups'
 import { projectService } from '../services/projects'
 import { lexorank } from '../utils/calculateLexorank'
 
-export const useDragAndDrop = ({ groups, tasks }) => {
+import { useProjectElements } from './contexts/useProjectElements'
+
+export const useDragAndDrop = () => {
 	const [activeId, setActiveId] = useState(null)
 	const [activeData, setActiveData] = useState([])
-	const [initialGroups, setInitialGroups] = useState([])
-	const [initialTasks, setInitialTasks] = useState([])
-
+	const { groups, tasks, setGroups, setTasks } = useProjectElements()
 	const updateGroupPosition = useMutation({
 		mutationKey: ['update-group-position'],
 		mutationFn: async ({ id, projectId, data }) => {
@@ -33,7 +33,7 @@ export const useDragAndDrop = ({ groups, tasks }) => {
 	})
 
 	const moveGroup = (activeIndex, overIndex) => {
-		const futureGroups = [...initialGroups]
+		const futureGroups = [...groups]
 		const thisGroup = futureGroups[activeIndex]
 		const prevPosition = thisGroup.orderPosition
 		let prevNeighbor
@@ -76,7 +76,7 @@ export const useDragAndDrop = ({ groups, tasks }) => {
 				thisGroup.orderPosition = prevPosition
 			})
 			.finally(() => {
-				setInitialGroups(
+				setGroups(
 					futureGroups.sort((a, b) =>
 						a.orderPosition.localeCompare(b.orderPosition)
 					)
@@ -91,7 +91,7 @@ export const useDragAndDrop = ({ groups, tasks }) => {
 		console.log('Следующий сосед:', nextNeighbor)
 		console.log('Новая позиция:', newPos)
 
-		setInitialGroups(
+		setGroups(
 			futureGroups.sort((a, b) =>
 				a.orderPosition.localeCompare(b.orderPosition)
 			)
@@ -108,7 +108,7 @@ export const useDragAndDrop = ({ groups, tasks }) => {
 	) => {
 		console.log(activeIndex, overIndex, taskId, oldGroupId, newGroupId)
 
-		const newGroupTasks = [...initialTasks[newGroupId]]
+		const newGroupTasks = [...tasks[newGroupId]]
 		console.log('Задачи для новой колонки:', newGroupTasks)
 
 		const taskToMove = newGroupTasks.find(task => task.id === taskId)
@@ -174,7 +174,8 @@ export const useDragAndDrop = ({ groups, tasks }) => {
 			if (task.id === taskId) {
 				return {
 					...task,
-					orderPosition: newPos
+					orderPosition: newPos,
+					excludeFromCount: false
 				}
 			}
 			return task
@@ -187,7 +188,7 @@ export const useDragAndDrop = ({ groups, tasks }) => {
 		console.log('Отсортированные задачи:', sortedTasks)
 
 		const updatedGroups = {
-			...initialTasks,
+			...tasks,
 			[newGroupId]: sortedTasks
 		}
 
@@ -204,37 +205,13 @@ export const useDragAndDrop = ({ groups, tasks }) => {
 
 		console.log('Отсортированные группы:', sortedGroups)
 
-		setInitialTasks(sortedGroups)
+		setTasks(sortedGroups)
 	}
-
-	useEffect(() => {
-		if (groups && groups.length) {
-			const sortedGroups = [...groups].sort(
-				(a, b) => a.orderPosition - b.orderPosition
-			)
-			setInitialGroups(sortedGroups)
-		}
-	}, [groups])
-
-	useEffect(() => {
-		if (tasks && Object.keys(tasks).length) {
-			const sortedGroups = Object.fromEntries(
-				Object.entries(tasks).map(([groupId, groupTasks]) => [
-					groupId,
-					[...groupTasks].sort((a, b) =>
-						a.orderPosition.localeCompare(b.orderPosition)
-					)
-				])
-			)
-
-			setInitialTasks(sortedGroups)
-		}
-	}, [tasks])
 
 	const sensors = useSensors(
 		useSensor(MouseSensor, {
 			activationConstraint: {
-				delay: 90,
+				delay: 80,
 				tolerance: 100
 			}
 		}),
@@ -281,7 +258,7 @@ export const useDragAndDrop = ({ groups, tasks }) => {
 		const oldGroupId = active.data.current.kanbanGroupId
 		// console.log(taskId, oldGroupId)
 
-		setInitialTasks(prev => {
+		setTasks(prev => {
 			const updatedTasks = { ...prev }
 
 			const movingTask = updatedTasks[oldGroupId]?.find(
@@ -375,8 +352,6 @@ export const useDragAndDrop = ({ groups, tasks }) => {
 	}
 
 	return {
-		initialGroups,
-		initialTasks,
 		sensors,
 		activeId,
 		activeData,

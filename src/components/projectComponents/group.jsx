@@ -1,8 +1,8 @@
 import { useDroppable } from '@dnd-kit/core'
 import {
 	SortableContext,
-	rectSortingStrategy,
-	useSortable
+	useSortable,
+	verticalListSortingStrategy
 } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { Button } from '@heroui/react'
@@ -21,11 +21,7 @@ export const Group = ({ data, projectId, activeId, tasks }) => {
 			id: data.id
 		}
 	})
-	// const style = {
-	// 	color: isOver ? 'green' : undefined
-	// }
-	// console.log(activeId ? activeId.startsWith('group-') : false)
-	// console.log(tasks)
+
 	const {
 		attributes,
 		listeners,
@@ -46,7 +42,7 @@ export const Group = ({ data, projectId, activeId, tasks }) => {
 		<div
 			ref={setGroupRef}
 			style={style}
-			className={`flex flex-col max-w-80 w-full min-w-80 border-1 rounded-lg h-fit gap-5 max-h-full group bg-slate-50 `}
+			className={`flex flex-col max-w-80 w-full min-w-80 border-1 rounded-lg h-fit gap-1 max-h-full group bg-slate-50 group pb-4 hover:pb-0`}
 		>
 			<header
 				{...listeners}
@@ -60,9 +56,8 @@ export const Group = ({ data, projectId, activeId, tasks }) => {
 						id={data.id}
 					/>
 					<GroupPopover
-						id={data.id}
+						data={data}
 						projectId={projectId}
-						name={data.name}
 					>
 						<Button
 							radius='sm'
@@ -88,7 +83,7 @@ export const Group = ({ data, projectId, activeId, tasks }) => {
 				{tasks && (
 					<SortableContext
 						items={tasks.map(task => `task-${task.id}`)}
-						strategy={rectSortingStrategy}
+						strategy={verticalListSortingStrategy}
 						disabled={activeId ? activeId.startsWith('group-') : false}
 					>
 						{tasks.map(task => (
@@ -100,7 +95,9 @@ export const Group = ({ data, projectId, activeId, tasks }) => {
 					</SortableContext>
 				)}
 			</div>
-			<CreateTaskButton groupId={data.id} />
+			<div className='w-full hidden group-hover:flex'>
+				<CreateTaskButton groupId={data.id} />
+			</div>
 		</div>
 	)
 }
