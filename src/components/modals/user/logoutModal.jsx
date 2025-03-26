@@ -10,14 +10,14 @@ import {
 } from '@heroui/react'
 import { useMutation } from '@tanstack/react-query'
 import { useState } from 'react'
-import { Navigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 import { APP_PAGES } from '../../../config/pageConfig'
 import { authService } from '../../../services/auth'
 
 export const LogoutModal = ({ isOpen, onOpenChange }) => {
 	const [loading, setLoading] = useState(false)
-
+	const navigate = useNavigate()
 	const { mutate } = useMutation({
 		mutationKey: ['logout'],
 		mutationFn: () => authService.logout(),
@@ -25,7 +25,7 @@ export const LogoutModal = ({ isOpen, onOpenChange }) => {
 			setLoading(true)
 		},
 		onSuccess() {
-			Navigate(APP_PAGES.LOGIN)
+			navigate(APP_PAGES.LOGIN)
 		},
 		onSettled() {
 			setLoading(false)

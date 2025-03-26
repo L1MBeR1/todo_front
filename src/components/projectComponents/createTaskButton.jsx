@@ -7,7 +7,7 @@ import { useDrawer } from '../../hooks/contexts/useDrawer'
 import { useProjectElements } from '../../hooks/contexts/useProjectElements'
 import { groupService } from '../../services/groups'
 
-export const CreateTaskButton = ({ groupId }) => {
+export const CreateTaskButton = ({ groupId, isHovered }) => {
 	const { openDrawer } = useDrawer()
 
 	const [isCreating, setIsCreating] = useState(false)
@@ -79,7 +79,7 @@ export const CreateTaskButton = ({ groupId }) => {
 					/>
 				</div>
 			) : (
-				<div className='w-full'>
+				<div className={`w-full ${isHovered ? 'opacity-100' : 'opacity-0'}`}>
 					<Button
 						radius='sm'
 						className='border-0'

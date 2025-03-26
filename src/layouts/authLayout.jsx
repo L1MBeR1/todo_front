@@ -1,6 +1,6 @@
-import { CircularProgress } from '@heroui/react'
+import { CircularProgress, Image } from '@heroui/react'
 import { useEffect, useState } from 'react'
-import { Outlet } from 'react-router-dom'
+import { Navigate, Outlet } from 'react-router-dom'
 
 import { LogoHandler } from '../components/logo/logoHadler'
 import { APP_PAGES } from '../config/pageConfig'
@@ -11,7 +11,7 @@ export const AuthLayout = () => {
 	const [loading, setLoading] = useState(true)
 	useEffect(() => {
 		const fetchToken = async () => {
-			const token = await authManager.ensureValidToken()
+			const token = await authManager.refreshToken()
 			setToken(token)
 			setLoading(false)
 			console.log(token)
@@ -32,9 +32,13 @@ export const AuthLayout = () => {
 	}
 	return (
 		<div className='w-full h-screen flex  justify-center mt-20'>
-			<div className='w-full flex flex-col gap-4 items-center'>
+			<div className='w-full flex flex-col gap-12 items-center'>
 				<LogoHandler>
-					<span>LOgo</span>
+					<Image
+						className='w-36'
+						src='/logoFullBlack.svg'
+						alt='logo'
+					/>
 				</LogoHandler>
 				<Outlet />
 			</div>

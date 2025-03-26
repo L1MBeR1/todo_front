@@ -1,4 +1,4 @@
-import { Button, Divider, Input, Link } from '@heroui/react'
+import { Button, Input, Link } from '@heroui/react'
 import { useMutation } from '@tanstack/react-query'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { APP_PAGES } from '../../../config/pageConfig'
 import { authService } from '../../../services/auth'
+import { ErrorAlert } from '../../alerts/alert'
 import { PasswordInput } from '../../inputs/passwordInput'
 
 export const LoginForm = () => {
@@ -16,54 +17,27 @@ export const LoginForm = () => {
 		formState: { errors }
 	} = useForm()
 
-	const [password, setPassword] = useState('')
 	const [loading, setLoading] = useState(false)
-
+	const [authError, setAuthError] = useState(null)
 	const navigate = useNavigate()
-
-	const validatePassword = () => {
-		if (password.length < 6) {
-			return 'Пароль должен быть'
-		}
-		return null
-	}
-
-	const handlePasswordChange = newPassword => {
-		setPassword(newPassword)
-	}
 
 	const { mutate } = useMutation({
 		mutationKey: ['login'],
 		mutationFn: data => authService.login(data),
 		onMutate() {
 			setLoading(true)
-			// setError({ title: null, description: null })
+			setAuthError(null)
 		},
 		onSuccess() {
 			navigate(APP_PAGES.WORKSPACE.HOME)
 			reset()
 		},
 		onError(error) {
-			// console.log(error)
-			// if (error?.response?.status === 422) {
-			// 	setError({
-			// 		title: 'Необходим другой способ входа',
-			// 		description:
-			// 			'Аккаунт создан через сервис. Восстановите пароль или войдите через сервис.'
-			// 	})
-			// 	return
-			// }
-			// if (error?.response?.status === 429) {
-			// 	setError({
-			// 		title: 'Слишком много запросов',
-			// 		description: 'Вы превысили лимит запросов. Попробуйте снова позже.'
-			// 	})
-			// 	return
-			// }
-			// setError({
-			// 	title: 'Ошибка авторизации',
-			// 	description: 'Проверьте введенные данные и попробуйте снова.'
-			// })
+			setAuthError({
+				title: 'Ошибка авторизации',
+				description:
+					error.response?.data?.message || 'Неверный email или пароль'
+			})
 		},
 		onSettled() {
 			setLoading(false)
@@ -71,26 +45,49 @@ export const LoginForm = () => {
 	})
 
 	const onSubmit = data => {
+		if (data.password.length < 6) {
+			setAuthError({
+				title: 'Ошибка валидации',
+				description: 'Пароль должен содержать минимум 6 символов'
+			})
+			return
+		}
 		mutate(data)
 	}
+
 	return (
-		<div className='flex flex-col gap-4 max-w-xs w-full'>
-			<h2>Войти в аккаунт</h2>
+		<div className='flex flex-col gap-5 max-w-xs w-full items-center'>
+			<h2 className='text-2xl font-semibold'>Войти в аккаунт</h2>
+
+			{authError && (
+				<ErrorAlert
+					title={authError.title}
+					description={authError.description}
+				/>
+			)}
+
 			<form
-				className='flex flex-col gap-3 w-full'
+				className='flex flex-col gap-4 w-full'
 				onSubmit={handleSubmit(onSubmit)}
 			>
 				<Input
 					label='Почта'
 					size={'md'}
-					// placeholder='Введите почту'
 					type='email'
 					variant={'bordered'}
 					isInvalid={!!errors.email}
+					errorMessage={errors.email?.message}
 					isDisabled={loading}
 					radius={'sm'}
-					{...register('email', { required: 'Почта обязательна' })}
+					{...register('email', {
+						required: 'Почта обязательна',
+						pattern: {
+							value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+							message: 'Некорректный email'
+						}
+					})}
 				/>
+
 				<PasswordInput
 					label='Пароль'
 					register={register}
@@ -99,6 +96,7 @@ export const LoginForm = () => {
 					radius={'sm'}
 					variant={'bordered'}
 					isInvalid={!!errors.password}
+					errorMessage={errors.password?.message}
 					disabled={loading}
 					rules={{
 						required: 'Пароль обязателен',
@@ -108,21 +106,26 @@ export const LoginForm = () => {
 						}
 					}}
 				/>
+
 				<Button
 					type='submit'
 					color='primary'
 					radius='sm'
 					isLoading={loading}
+					fullWidth
 				>
 					Войти
 				</Button>
 			</form>
-			<Divider />
-			<div className='flex flex-col'>
+
+			<div className='flex flex-col items-center gap-0.5'>
 				<p>Ещё нет аккаунта?</p>
 				<Link
 					href={APP_PAGES.REGISTER}
 					isDisabled={loading}
+					color='default'
+					underline='always'
+					showAnchorIcon
 				>
 					Создать
 				</Link>

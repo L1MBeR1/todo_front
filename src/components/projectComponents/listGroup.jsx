@@ -7,6 +7,7 @@ import {
 import { CSS } from '@dnd-kit/utilities'
 import { Button } from '@heroui/react'
 import { EllipsisVertical } from 'lucide-react'
+import { useState } from 'react'
 
 import { GroupPopover } from '../popovers/groupPopover'
 
@@ -37,11 +38,14 @@ export const ListGroup = ({ data, projectId, activeId, tasks }) => {
 		opacity: active?.id.replace('group-', '') == data.id ? '0' : '1'
 	}
 
+	const [isHovered, setIsHovered] = useState(false)
 	return (
 		<div
 			ref={setGroupRef}
 			style={style}
-			className={`flex flex-col  w-full min-w-80 border-1 rounded-lg h-fit max-h-full group bg-slate-50 group `}
+			className={`flex flex-col  w-full min-w-80 border-1 rounded-lg h-fit max-h-full  bg-slate-50  `}
+			onMouseEnter={() => setIsHovered(true)}
+			onMouseLeave={() => setIsHovered(false)}
 		>
 			<header
 				{...listeners}
@@ -96,9 +100,10 @@ export const ListGroup = ({ data, projectId, activeId, tasks }) => {
 					</SortableContext>
 				)}
 			</div>
-			<div className='w-full opacity-0 group-hover:opacity-100'>
-				<CreateTaskButton groupId={data.id} />
-			</div>
+			<CreateTaskButton
+				groupId={data.id}
+				isHovered={isHovered}
+			/>
 		</div>
 	)
 }

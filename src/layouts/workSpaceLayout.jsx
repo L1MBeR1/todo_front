@@ -11,7 +11,7 @@ export const WorkSpaceLayout = () => {
 	const [loading, setLoading] = useState(true)
 	useEffect(() => {
 		const fetchToken = async () => {
-			const token = await authManager.ensureValidToken()
+			const token = await authManager.refreshToken()
 			setToken(token)
 			setLoading(false)
 		}

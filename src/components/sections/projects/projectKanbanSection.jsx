@@ -27,14 +27,12 @@ export const ProjectKanbanSection = ({ projectId }) => {
 
 	const { groups, tasks } = useProjectElements()
 
-	console.log(groups)
 	return (
 		<DndContext
 			sensors={sensors}
 			onDragStart={handleDragStart}
 			onDragOver={handleDragOver}
 			onDragEnd={handleDragEnd}
-			// collisionDetection={closestCorners}
 		>
 			<section
 				className='flex flex-col w-full select-none grow p-8 overflow-x-auto pt-4'

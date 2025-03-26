@@ -6,7 +6,7 @@ import {
 	Tabs,
 	useDisclosure
 } from '@heroui/react'
-import { CircleHelp, SquareChartGantt } from 'lucide-react'
+import { CircleHelp, House, SquareChartGantt } from 'lucide-react'
 import { useLocation } from 'react-router-dom'
 
 import { APP_PAGES } from '../../config/pageConfig'
@@ -42,7 +42,7 @@ export const WorkSpaceSidebar = () => {
 							color='primary'
 							classNames={{
 								tabList: 'bg-transparent p-0 rounded-md py-1.5 gap-3',
-								tab: 'justify-start px-4 py-1.5 bg-default-800',
+								tab: 'justify-start px-2 py-1.5 bg-default-800',
 								tabContent: 'text-white text-md font-semibold'
 							}}
 						>
@@ -50,7 +50,14 @@ export const WorkSpaceSidebar = () => {
 								radius='sm'
 								key='/home'
 								href={APP_PAGES.WORKSPACE.HOME}
-								title='Главная'
+								title={
+									<div className='flex flex-row gap-2 items-center'>
+										<House />
+										<p className='truncate text-sm font-normal max-w-44'>
+											Главная
+										</p>
+									</div>
+								}
 							/>
 						</Tabs>
 						<section className='flex flex-col gap-2'>
