@@ -47,7 +47,7 @@ export const GroupName = ({ name, projectId, id, isList = false }) => {
 		mutationFn: () =>
 			projectService.updateGroup(id, projectId, { name: newName }),
 		onSuccess(data) {
-			console.log(data)
+			// console.log(data)
 			updateGroup(data.id, { name: data.name })
 		},
 		onSettled() {
@@ -72,6 +72,7 @@ export const GroupName = ({ name, projectId, id, isList = false }) => {
 						handleChange(value)
 					}}
 					maxLength={150}
+					aria-label='name'
 				/>
 			) : (
 				<p

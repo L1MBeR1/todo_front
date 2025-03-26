@@ -23,37 +23,37 @@ axiosWithAuth.interceptors.request.use(
 				config.headers.Authorization = `Bearer ${accessToken}`
 			}
 		} else {
-			console.log('No valid token available, clearing tokens')
+			// console.log('No valid token available, clearing tokens')
 			authManager.clearToken()
 		}
-		console.log(config)
+		// console.log(config)
 		return config
 	},
 	error => {
-		console.error('Request Error:', error)
+		// console.error('Request Error:', error)
 		return Promise.reject(error)
 	}
 )
 
 axiosWithAuth.interceptors.response.use(
 	response => {
-		console.log('Response:', {
-			status: response.status,
-			data: response.data,
-			headers: response.headers
-		})
+		// console.log('Response:', {
+		// 	status: response.status,
+		// 	data: response.data,
+		// 	headers: response.headers
+		// })
 		return response
 	},
 	async error => {
 		const originalRequest = error.config
 
-		console.error('Error Response:', {
-			status: error?.response?.status,
-			data: error?.response?.data,
-			message: error.message
-		})
+		// console.error('Error Response:', {
+		// 	status: error?.response?.status,
+		// 	data: error?.response?.data,
+		// 	message: error.message
+		// })
 
-		console.log(1)
+		// console.log(1)
 
 		if (
 			(error?.response?.status === 401 ||
@@ -67,11 +67,11 @@ axiosWithAuth.interceptors.response.use(
 			const newAccessToken = await authManager.ensureValidToken()
 
 			if (newAccessToken) {
-				console.log('Token refreshed successfully, retrying original request')
+				// console.log('Token refreshed successfully, retrying original request')
 				originalRequest.headers.Authorization = `Bearer ${newAccessToken}`
 				return axiosWithAuth.request(originalRequest)
 			} else {
-				console.log('Failed to refresh token, redirecting to login')
+				// console.log('Failed to refresh token, redirecting to login')
 				authManager.clearToken()
 
 				if (typeof window !== 'undefined') {

@@ -8,7 +8,7 @@ export const authService = {
 			...data
 		})
 
-		console.log(response)
+		// console.log(response)
 		if (response.data.accessToken) {
 			authManager.setToken(response.data.accessToken)
 		}
@@ -16,11 +16,11 @@ export const authService = {
 		return response
 	},
 	async register(data) {
-		console.log(data)
+		// console.log(data)
 		const response = await axiosClassic.post('/auth/register', {
 			...data
 		})
-		console.log(response.data)
+		// console.log(response.data)
 		if (response.data.accessToken) {
 			authManager.setToken(response.data.accessToken)
 		}
@@ -33,7 +33,7 @@ export const authService = {
 	},
 
 	async getNewTokens() {
-		console.log('refresh')
+		// console.log('refresh')
 		const response = await axiosClassic.post('/auth/refresh')
 		return response
 	}

@@ -35,7 +35,7 @@ export const DrawerTaskName = ({ name, projectId, id }) => {
 		mutationFn: () =>
 			projectService.updateGroup(id, projectId, { name: newName }),
 		onSuccess(response) {
-			console.log(response)
+			// console.log(response)
 			queryClient.refetchQueries({
 				queryKey: [`project/${projectId}/groups`],
 				type: 'active'
@@ -51,6 +51,7 @@ export const DrawerTaskName = ({ name, projectId, id }) => {
 		<>
 			{isChangingName ? (
 				<Textarea
+					aria-label='name'
 					radius='sm'
 					maxLength={150}
 					variant='bordered'

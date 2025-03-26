@@ -14,7 +14,7 @@ export const AuthLayout = () => {
 			const token = await authManager.refreshToken()
 			setToken(token)
 			setLoading(false)
-			console.log(token)
+			// console.log(token)
 		}
 
 		fetchToken()

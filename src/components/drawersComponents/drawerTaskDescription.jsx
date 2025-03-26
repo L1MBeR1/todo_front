@@ -37,7 +37,7 @@ export const DrawerTaskDescription = ({ description, projectId, id }) => {
 				description: newDescription
 			}),
 		onSuccess(response) {
-			console.log(response)
+			// console.log(response)
 			queryClient.refetchQueries({
 				queryKey: [`project/${projectId}/groups`],
 				type: 'active'

@@ -88,6 +88,7 @@ export const SimpleCheckbox = ({
 		>
 			<VisuallyHidden>
 				<input
+					aria-label='Выберите дату'
 					{...getInputProps()}
 					onChange={e => handleChange(e.target.checked)}
 				/>

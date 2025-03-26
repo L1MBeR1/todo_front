@@ -18,7 +18,7 @@ import { projectService } from '../../../services/projects'
 const DeleteGroupModal = ({ isOpen, onOpenChange, data, projectId }) => {
 	const [loading, setLoading] = useState(false)
 	const { removeGroup } = useProjectElements()
-	console.log(data)
+	// console.log(data)
 	const createProject = useMutation({
 		mutationKey: ['create-project'],
 		mutationFn: () => projectService.deleteGroup(data.id, projectId),

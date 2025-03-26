@@ -8,7 +8,7 @@ import { DrawerProvider } from '../../providers/drawerProvider'
 export const ProjectPage = () => {
 	const { id } = useParams()
 	const navigate = useNavigate()
-	console.log(id)
+	// console.log(id)
 	const { data, isError } = useProject(id)
 
 	if (isError) {

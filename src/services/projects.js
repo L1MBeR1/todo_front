@@ -45,7 +45,7 @@ class ProjectService {
 	}
 
 	async createGroup(id, data) {
-		console.log(id, data)
+		// console.log(id, data)
 		const response = await axiosWithAuth.post(
 			`${this.BASE_URL}/${id}/groups`,
 			data
@@ -68,7 +68,7 @@ class ProjectService {
 	}
 
 	async updateGroup(id, projectId, data) {
-		console.log(id, projectId, data)
+		// console.log(id, projectId, data)
 		const response = await axiosWithAuth.put(
 			`${this.BASE_URL}/${projectId}/groups/${id}`,
 			{ ...data }

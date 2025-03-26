@@ -32,7 +32,7 @@ const CreateProjectModal = ({ isOpen, onOpenChange }) => {
 			setLoading(true)
 		},
 		onSuccess(data) {
-			console.log(data)
+			// console.log(data)
 			reset()
 			onOpenChange(false)
 			queryClient.refetchQueries({ queryKey: ['my-projects'], type: 'active' })
@@ -44,7 +44,7 @@ const CreateProjectModal = ({ isOpen, onOpenChange }) => {
 	})
 
 	const onSubmit = data => {
-		console.log(data)
+		// console.log(data)
 		createProject.mutate(data)
 	}
 

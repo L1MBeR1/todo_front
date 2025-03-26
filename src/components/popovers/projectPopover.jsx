@@ -16,7 +16,7 @@ import { UpdateProjectModal } from '../modals/projects/updateProjectModal'
 
 export const ProjectPopover = ({ children, data }) => {
 	const [openAccountPopover, setOpenAccountPopover] = useState(false)
-	console.log(data)
+	// console.log(data)
 	const {
 		isOpen: isDeleteOpen,
 		onOpen: onDeleteOpen,

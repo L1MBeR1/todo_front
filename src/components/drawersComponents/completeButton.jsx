@@ -18,7 +18,7 @@ export const CompleteButton = ({ projectId }) => {
 				completed: true
 			}),
 		onSuccess(data) {
-			console.log(data)
+			// console.log(data)
 			removeTask(data.kanbanGroupId, data.id)
 			setDrawerContent(prev => ({
 				...prev,
@@ -42,7 +42,7 @@ export const CompleteButton = ({ projectId }) => {
 				completed: false
 			}),
 		onSuccess(data) {
-			console.log(data)
+			// console.log(data)
 			addTask(data.kanbanGroupId, data)
 			setDrawerContent(prev => ({
 				...prev,

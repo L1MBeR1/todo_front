@@ -21,7 +21,7 @@ export const DeleteTaskModal = ({ isOpen, onOpenChange, data }) => {
 	const { removeTask } = useProjectElements()
 	const { closeDrawer } = useDrawer()
 
-	console.log(data)
+	// console.log(data)
 	const createProject = useMutation({
 		mutationKey: ['delete-task'],
 		mutationFn: () => groupService.deleteTask(data.id, data.kanbanGroupId),

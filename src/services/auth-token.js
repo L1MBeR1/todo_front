@@ -16,7 +16,7 @@ class AuthManager {
 
 	setToken(token) {
 		this.accessToken = token
-		console.log(this.accessToken)
+		// console.log(this.accessToken)
 		return
 	}
 

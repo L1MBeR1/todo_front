@@ -37,7 +37,7 @@ export const TaskDrawer = ({ projectId }) => {
 
 	const { isOpen, onOpen, onOpenChange } = useDisclosure()
 
-	console.log(drawerContent)
+	// console.log(drawerContent)
 	return (
 		<>
 			<DeleteTaskModal

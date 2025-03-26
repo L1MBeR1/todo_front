@@ -69,7 +69,7 @@ export const useDragAndDrop = () => {
 				}
 			})
 			.then(result => {
-				// console.log(121212, result.orderPosition)
+				// // console.log(121212, result.orderPosition)
 				thisGroup.orderPosition = result.orderPosition
 			})
 			.catch(() => {
@@ -84,12 +84,12 @@ export const useDragAndDrop = () => {
 				return
 			})
 
-		console.log('Текущий  элемент:', thisGroup)
-		console.log('Текущий индекс:', activeIndex)
-		console.log('Новый индекс:', overIndex)
-		console.log('Предыдущий сосед:', prevNeighbor)
-		console.log('Следующий сосед:', nextNeighbor)
-		console.log('Новая позиция:', newPos)
+		// console.log('Текущий  элемент:', thisGroup)
+		// console.log('Текущий индекс:', activeIndex)
+		// console.log('Новый индекс:', overIndex)
+		// console.log('Предыдущий сосед:', prevNeighbor)
+		// console.log('Следующий сосед:', nextNeighbor)
+		// console.log('Новая позиция:', newPos)
 
 		setGroups(
 			futureGroups.sort((a, b) =>
@@ -106,13 +106,13 @@ export const useDragAndDrop = () => {
 		newGroupId,
 		data
 	) => {
-		console.log(activeIndex, overIndex, taskId, oldGroupId, newGroupId)
+		// console.log(activeIndex, overIndex, taskId, oldGroupId, newGroupId)
 
 		const newGroupTasks = [...tasks[newGroupId]]
-		console.log('Задачи для новой колонки:', newGroupTasks)
+		// console.log('Задачи для новой колонки:', newGroupTasks)
 
 		const taskToMove = newGroupTasks.find(task => task.id === taskId)
-		console.log('Задача, которую нужно переместить:', taskToMove)
+		// console.log('Задача, которую нужно переместить:', taskToMove)
 
 		let prevNeighbor
 		let nextNeighbor
@@ -135,14 +135,14 @@ export const useDragAndDrop = () => {
 		if (nextNeighbor === null) prevNeighbor = newGroupTasks[overIndex] || null
 		if (prevNeighbor === null) nextNeighbor = newGroupTasks[overIndex] || null
 
-		console.log('Предыдущий сосед:', prevNeighbor)
-		console.log('Следующий сосед:', nextNeighbor)
+		// console.log('Предыдущий сосед:', prevNeighbor)
+		// console.log('Следующий сосед:', nextNeighbor)
 
 		const newPos = lexorank(
 			prevNeighbor?.orderPosition || null,
 			nextNeighbor?.orderPosition || null
 		)
-		console.log('Новая позиция:', newPos)
+		// console.log('Новая позиция:', newPos)
 
 		updateTaskPosition.mutateAsync({
 			id: data.id,
@@ -155,7 +155,7 @@ export const useDragAndDrop = () => {
 			}
 		})
 		// .then(result => {
-		// 	// console.log(121212, result.orderPosition)
+		// 	// // console.log(121212, result.orderPosition)
 		// 	thisGroup.orderPosition = result.orderPosition
 		// })
 		// .catch(() => {
@@ -180,19 +180,19 @@ export const useDragAndDrop = () => {
 			}
 			return task
 		})
-		console.log('Обновленные задачи после изменения позиции:', updatedTasks)
+		// console.log('Обновленные задачи после изменения позиции:', updatedTasks)
 
 		const sortedTasks = [...updatedTasks].sort((a, b) =>
 			a.orderPosition.localeCompare(b.orderPosition)
 		)
-		console.log('Отсортированные задачи:', sortedTasks)
+		// console.log('Отсортированные задачи:', sortedTasks)
 
 		const updatedGroups = {
 			...tasks,
 			[newGroupId]: sortedTasks
 		}
 
-		console.log('Обновленные группы перед сортировкой:', updatedGroups)
+		// console.log('Обновленные группы перед сортировкой:', updatedGroups)
 
 		const sortedGroups = Object.fromEntries(
 			Object.entries(updatedGroups).map(([groupId, groupTasks]) => [
@@ -203,7 +203,7 @@ export const useDragAndDrop = () => {
 			])
 		)
 
-		console.log('Отсортированные группы:', sortedGroups)
+		// console.log('Отсортированные группы:', sortedGroups)
 
 		setTasks(sortedGroups)
 	}
@@ -226,7 +226,7 @@ export const useDragAndDrop = () => {
 
 	const handleDragStart = event => {
 		const { active } = event
-		console.log(event)
+		// console.log(event)
 		setActiveData(active.data.current)
 		setActiveId(active.id)
 	}
@@ -237,7 +237,7 @@ export const useDragAndDrop = () => {
 
 		if (!active || !over || active.id == over.id) return
 
-		console.log(active, over)
+		// console.log(active, over)
 		let newGroupId
 		if (
 			over.id.startsWith('group-') &&
@@ -251,12 +251,12 @@ export const useDragAndDrop = () => {
 		) {
 			newGroupId = over.data.current.kanbanGroupId
 		}
-		console.log(newGroupId)
+		// console.log(newGroupId)
 		if (!newGroupId) return
 
 		const taskId = active.data.current.id
 		const oldGroupId = active.data.current.kanbanGroupId
-		// console.log(taskId, oldGroupId)
+		// // console.log(taskId, oldGroupId)
 
 		setTasks(prev => {
 			const updatedTasks = { ...prev }
@@ -285,7 +285,7 @@ export const useDragAndDrop = () => {
 
 		// if (!over.id.startsWith('group-')) return
 
-		// console.log(
+		// // console.log(
 		// 	'Перетаскивание группой:',
 		// 	active.data.current.sortable.index,
 		// 	'→',
@@ -294,17 +294,17 @@ export const useDragAndDrop = () => {
 	}
 
 	const handleDragEnd = event => {
-		console.log(activeData)
+		// console.log(activeData)
 		setActiveId(null)
 		setActiveData(null)
 		const { active, over } = event
-		// console.log('active', active)
-		// console.log('over', over)
+		// // console.log('active', active)
+		// // console.log('over', over)
 		if (!active || !over) return
 
 		if (active.id.startsWith('group-')) {
-			// console.log(groups)
-			// console.log(over.data.current.sortable.index)
+			// // console.log(groups)
+			// // console.log(over.data.current.sortable.index)
 			const activeIndex = active.data.current.sortable.index
 
 			const overIndex = over.data.current.sortable.index
@@ -315,10 +315,10 @@ export const useDragAndDrop = () => {
 			moveGroup(activeIndex, overIndex)
 		}
 		if (active.id.startsWith('task-')) {
-			// console.log('taska')
-			// console.log(over.data.current.sortable.index)
+			// // console.log('taska')
+			// // console.log(over.data.current.sortable.index)
 			const activeIndex = active.data.current.sortable.index
-			console.log('taska')
+			// console.log('taska')
 			const taskId = active.data.current.id
 			const oldGroupId = activeData.kanbanGroupId
 			const newGroupId = active.data.current.kanbanGroupId
@@ -340,15 +340,15 @@ export const useDragAndDrop = () => {
 		}
 
 		// if (active.id.startsWith('group-') && over.id.startsWith('task-')) {
-		// 	console.log('Колонка сброшена на задачу — отменяем действие')
+		// 	// console.log('Колонка сброшена на задачу — отменяем действие')
 		// 	return
 		// }
 		// if (active.id.startsWith('task-') && over.id.startsWith('group-')) {
-		// 	console.log('Задача сброшена на колонку')
+		// 	// console.log('Задача сброшена на колонку')
 		// 	return
 		// }
 
-		// console.log(`Элемент ${active.id} перемещён на ${over.id}`)
+		// // console.log(`Элемент ${active.id} перемещён на ${over.id}`)
 	}
 
 	return {

@@ -30,7 +30,7 @@ export const DrawerDatePicker = ({ selectedDate }) => {
 				setDate(parsedDate)
 				setIsPastDue(checkIfPastDue(parsedDate))
 			} catch (e) {
-				console.error('Invalid date format:', selectedDate)
+				// console.error('Invalid date format:', selectedDate)
 				setDate(null)
 				setIsPastDue(false)
 			}
@@ -49,7 +49,7 @@ export const DrawerDatePicker = ({ selectedDate }) => {
 					).toISOString()
 				: null
 
-			console.log(dueDate)
+			// console.log(dueDate)
 			return groupService.updateTask(
 				drawerContent.id,
 				drawerContent.kanbanGroupId,

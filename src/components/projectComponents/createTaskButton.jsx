@@ -26,7 +26,7 @@ export const CreateTaskButton = ({ groupId, isHovered }) => {
 		mutationFn: data => groupService.createGroupTasks(groupId, data),
 		onMutate() {},
 		onSuccess(data) {
-			console.log(data)
+			// console.log(data)
 			addTask(groupId, data)
 
 			openDrawer(data, data.id)
@@ -76,6 +76,7 @@ export const CreateTaskButton = ({ groupId, isHovered }) => {
 						onValueChange={handleNameChange}
 						onKeyDown={handleKeyDown}
 						maxLength={150}
+						aria-label='name'
 					/>
 				</div>
 			) : (

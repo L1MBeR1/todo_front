@@ -62,6 +62,7 @@ export const CreateGroup = ({ projectId }) => {
 			{isCreating ? (
 				<div className='w-full'>
 					<Input
+						aria-label='name'
 						maxLength={150}
 						variant='bordered'
 						value={name}

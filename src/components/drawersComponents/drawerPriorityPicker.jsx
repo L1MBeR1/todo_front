@@ -86,6 +86,7 @@ export const DrawerPriorityPicker = ({ selectedPriority }) => {
 		>
 			{priorities.map(priority => (
 				<SelectItem
+					textValue={priority.key}
 					key={priority.key}
 					value={priority.key}
 				>

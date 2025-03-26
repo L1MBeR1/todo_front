@@ -37,7 +37,7 @@ export const WorkSpaceSidebar = () => {
 						<Tabs
 							fullWidth
 							selectedKey={pathname}
-							aria-label='Projects'
+							aria-label='Main'
 							isVertical={true}
 							color='primary'
 							classNames={{
