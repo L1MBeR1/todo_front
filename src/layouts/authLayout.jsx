@@ -23,7 +23,7 @@ export const AuthLayout = () => {
 	if (loading) {
 		return (
 			<section className='w-full h-screen flex justify-center items-center'>
-				<CircularProgress />
+				<CircularProgress aria-label='Loading...' />
 			</section>
 		)
 	}

@@ -66,7 +66,7 @@ export const WorkSpaceSidebar = () => {
 							</p>
 
 							{isLoading ? (
-								<CircularProgress />
+								<CircularProgress aria-label='Loading...' />
 							) : (
 								<>
 									<Tabs

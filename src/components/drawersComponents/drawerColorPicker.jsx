@@ -82,7 +82,7 @@ export const DrawerColorPicker = ({ selectedColor }) => {
 				<div className='hover:bg-default-200 px-2 py-1.5 rounded-lg text-sm flex flex-row gap-1.5 cursor-pointer items-center'>
 					{selectedColorData ? (
 						<div
-							className='w-4 h-4 rounded-md mr-1.5'
+							className='w-4 h-4 rounded-md mr-1.5 border-1'
 							style={{ backgroundColor: `#${selectedColorData.hashCode}` }}
 						/>
 					) : (

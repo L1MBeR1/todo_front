@@ -83,7 +83,7 @@ export const ProjectMainSection = ({ projectData, projectId }) => {
 				</div>
 				{isLoading && isTaskLoading ? (
 					<div className='w-full h-full flex items-center justify-center'>
-						<CircularProgress />
+						<CircularProgress aria-label='Loading...' />
 					</div>
 				) : (
 					<>

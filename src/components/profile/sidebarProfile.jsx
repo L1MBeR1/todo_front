@@ -20,7 +20,7 @@ export const SidebarProfile = () => {
 					<Avatar radius='sm' />
 
 					{isLoading ? (
-						<CircularProgress />
+						<CircularProgress aria-label='Loading...' />
 					) : (
 						<div className='flex flex-col text-white text-sm leading-tight py-0.5'>
 							<p className='font-semibold truncate max-w-40'>{data.username}</p>
