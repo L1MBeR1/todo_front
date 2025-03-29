@@ -90,12 +90,12 @@ export const DrawerDatePicker = ({ selectedDate }) => {
 		onSuccess: data => {
 			updateTask(data.kanbanGroupId, data.id, {
 				colorId: data.colorId,
-				colorHashCode: data.colorHashCode
+				dueDate: data.dueDate
 			})
 			setDrawerContent(prev => ({
 				...prev,
 				colorId: data.colorId,
-				colorHashCode: data.colorHashCode
+				dueDate: data.dueDate
 			}))
 		},
 		onError: error => {
